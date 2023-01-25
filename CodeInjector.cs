@@ -16,7 +16,7 @@ using Nop.Web.Framework.Infrastructure;
 namespace Nop.Plugin.Misc.CodeInjector
 {   
     public class CodeInjector : BasePlugin, IMiscPlugin, IWidgetPlugin
-    {
+    {//test code
         private readonly IWebHelper _webHelper;
         private readonly WidgetSettings _widgetSettings;
         private readonly ISettingService _settingService;
