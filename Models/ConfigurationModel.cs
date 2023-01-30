@@ -1,4 +1,10 @@
 ﻿
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Nop.Plugin.Misc.CodeInjector.Extensions;
+using Nop.Web.Framework.Infrastructure;
 using Nop.Web.Framework.Models;
 
 
@@ -11,9 +17,20 @@ namespace Nop.Plugin.Misc.CodeInjector.Models
     {
         public ConfigurationModel()
         {
-            
+            AddModel = new CodeToInjectDTO();
+            SearchModel = new CodeToInjectSearchModel();
+            Settings = new CodeInjectorSettings();
         }
 
+        public IList<SelectListItem> Zones = typeof(PublicWidgetZones).GetProperties().Select(r => new SelectListItem()
+        {
+             Text = r.Name, Value = r.GetValue(r.Name).ToString()
+        }).ToArray(); 
 
+        public CodeToInjectDTO AddModel { get; set; }
+
+        public CodeToInjectSearchModel SearchModel { get; set; }
+
+        public CodeInjectorSettings Settings { get; set; }
     }
 }

@@ -20,6 +20,8 @@ namespace Nop.Plugin.Misc.CodeInjector.Models
 
         [Required]
         public string Code { get; set; }
+
+        public int Order { get; set; } = 0;
     }
 
 

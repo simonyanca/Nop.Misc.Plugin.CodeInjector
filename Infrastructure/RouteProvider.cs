@@ -16,13 +16,8 @@ namespace Nop.Plugin.Misc.CodeInjector.Infrastructure
         /// <param name="endpointRouteBuilder">Route builder</param>
         public void RegisterRoutes(IEndpointRouteBuilder endpointRouteBuilder)
         {
-            endpointRouteBuilder.MapControllerRoute("Redirections", "Admin/CodeInjector/GetRedirections/",
-            new { controller = "CodeInjector", action = "GetRedirections" });
-            endpointRouteBuilder.MapControllerRoute("Redirections", "Admin/CodeInjector/RedirectUpdate/",
-            new { controller = "CodeInjector", action = "RedirectUpdate" });
-            endpointRouteBuilder.MapControllerRoute("Redirections", "Admin/CodeInjector/RedirectRemove/",
-            new { controller = "CodeInjector", action = "RedirectRemove" });
-
+            endpointRouteBuilder.MapControllerRoute("CodeInjectorGet", "Admin/CodeInjector/Get/", new { controller = "CodeInjector", action = "Get" });
+            endpointRouteBuilder.MapControllerRoute("CodeInjectorRemove", "Admin/CodeInjector/Remove/", new { controller = "CodeInjector", action = "Remove" });
         }
 
         /// <summary>

@@ -22,6 +22,16 @@ namespace Nop.Plugin.Misc.CodeInjector.Extensions
             return obj;
         }
 
+        public static string GetStringPropValue(this Object obj, String name)
+        {
+            Object retval = GetPropValue(obj, name);
+            if (retval == null)
+            { return default(string); }
+
+            // throws InvalidCastException if types are incompatible
+            return retval.ToString();
+        }
+
         public static T GetPropValue<T>(this Object obj, String name)
         {
             Object retval = GetPropValue(obj, name);

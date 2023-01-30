@@ -1,13 +1,15 @@
 ﻿
-using System.Text.Json;
+
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
-using Nop.Core;
-using Nop.Services.Payments;
 using Nop.Web.Framework.Components;
-using Nop.Plugin.Misc.CodeInjector.Extensions;
+using Nop.Plugin.Misc.CodeInjector.Services;
+using Nop.Services.Localization;
+using Nop.Core;
+using Nop.Services.Configuration;
+using System.Text.Json;
 
 namespace Nop.Plugin.Misc.CodeInjector.Components
 {
@@ -17,32 +19,23 @@ namespace Nop.Plugin.Misc.CodeInjector.Components
     public class CodeViewComponent : NopViewComponent
     {
         #region Fields
+        private readonly CIParseService _parserService;
 
-        private readonly IPaymentPluginManager _paymentPluginManager;
-        private readonly IStoreContext _storeContext;
-        private readonly IWorkContext _workContext;
 
         #endregion
 
         #region Ctor
 
-        public CodeViewComponent(IPaymentPluginManager paymentPluginManager,
-            IStoreContext storeContext,
-            IWorkContext workContext)
+        public CodeViewComponent(CIParseService parserService)
         {
-            _paymentPluginManager = paymentPluginManager;
-            _storeContext = storeContext;
-            _workContext = workContext;
+            _parserService = parserService;
         }
 
         #endregion
 
         #region Methods
 
-        public static object GetPropValue(object src, string propName)
-        {
-            return src.GetType().GetProperty(propName).GetValue(src, null);
-        }
+     
 
         /// <summary>
         /// Invoke view component
@@ -55,11 +48,8 @@ namespace Nop.Plugin.Misc.CodeInjector.Components
         /// </returns>
         public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
-            string jsonString = JsonSerializer.Serialize(additionalData);
-            var dynamicObject = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonString)!;
-
-            bool o = additionalData.GetPropValue<bool>("IsHomePage");
-            return new HtmlContentViewComponentResult(new HtmlString(o.ToString()));
+            string html =  await _parserService.GetHtml(widgetZone, additionalData);
+            return await Task.FromResult(new HtmlContentViewComponentResult(new HtmlString(html)));
         }
 
         #endregion

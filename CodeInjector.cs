@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,14 +10,12 @@ using Nop.Plugin.Misc.CodeInjector.Services;
 using Nop.Services.Cms;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
-using Nop.Services.Localization;
 using Nop.Services.Plugins;
-using Nop.Web.Framework.Infrastructure;
 
 namespace Nop.Plugin.Misc.CodeInjector
 {   
     public class CodeInjector : BasePlugin, IMiscPlugin, IWidgetPlugin
-    {//test code 
+    { 
         private readonly IWebHelper _webHelper;
         private readonly WidgetSettings _widgetSettings;
         private readonly ISettingService _settingService;
@@ -55,17 +54,8 @@ namespace Nop.Plugin.Misc.CodeInjector
             return $"{_webHelper.GetStoreLocation()}Admin/CodeInjector/Configure";
         }
 
-      
-
-
         public override async Task InstallAsync()
         {
-            //locales
-            //await _localizationService.AddOrUpdateLocaleResourceAsync(new Dictionary<string, string>
-            //{
-            //    ["Plugins.Misc.CodeInjector.Fields.PhoneNumber"] = "Phone number"
-            //});
-
             if (!_widgetSettings.ActiveWidgetSystemNames.Contains(CodeInjectorDefaults.SystemName))
             {
                 _widgetSettings.ActiveWidgetSystemNames.Add(CodeInjectorDefaults.SystemName);

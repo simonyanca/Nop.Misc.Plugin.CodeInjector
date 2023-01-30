@@ -14,13 +14,14 @@ namespace Nop.Plugin.Misc.CodeInjector.Infrastructure
 
         public void Configure(IApplicationBuilder application)
         {
-            //application.UseCustomRedirect();
+            
         }
 
         
         public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<CodeInjectorService>();
+            services.AddScoped<ICodeInjectorService, CodeInjectorService>();
+            services.AddScoped< CIParseService>();
         }
     }
 }
