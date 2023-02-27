@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Nop.Core;
-using Nop.Web.Framework.Models;
+using Nop.Plugin.Misc.CodeInjector.Domain;
 
 namespace Nop.Plugin.Misc.CodeInjector.Services
 {
@@ -25,7 +20,13 @@ namespace Nop.Plugin.Misc.CodeInjector.Services
         public string Code { get; set; }
 
         public int Order { get; set; }
-    }
+
+		[Required]
+		public int RenderType { get; set; }
+
+        public long CacheKey { get; set; }
+
+	}
 
 
 }

@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Bibliography;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
+using Nop.Plugin.Misc.CodeInjector.Domain;
 using Nop.Web.Framework.Infrastructure;
 using Nop.Web.Framework.Models;
 
@@ -26,11 +28,35 @@ namespace Nop.Plugin.Misc.CodeInjector.Models
 			Value = r.GetValue(r.Name).ToString()
 		}).ToArray();
 
+		public IList<SelectListItem> RenderTypes = Enum.GetNames(typeof(RenderTypeEnum)).Select(r => new SelectListItem()
+		{
+			Text = r,
+			Value = ((int)Enum.Parse<RenderTypeEnum>(r)).ToString()
+		}).ToArray();
+
 		[Required]
         public string Code { get; set; }
 
-        public int Order { get; set; } = 0;
-    }
+		public string CodeShort 
+		{ 
+			get
+			{
+				return string.Join("", Code.Take(15)) + "...";
+			}
+		}
+
+		public int Order { get; set; } = 0;
+
+		public long CacheKey { get; set; }
+
+		public RenderTypeEnum RenderType { get; set; }
+
+		public string RenderTypeName { get
+			{
+				return RenderType.ToString();
+			} 
+		}
+	}
 
 
 }

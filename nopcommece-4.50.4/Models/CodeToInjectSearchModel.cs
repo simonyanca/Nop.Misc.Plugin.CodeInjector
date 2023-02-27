@@ -5,6 +5,7 @@ namespace Nop.Plugin.Misc.CodeInjector.Models
 {
     public record CodeToInjectSearchModel : BaseSearchModel
     {
+        
         public string Name { get; set; }
         public string Zone { get; set; }
         public string Code { get; set; }

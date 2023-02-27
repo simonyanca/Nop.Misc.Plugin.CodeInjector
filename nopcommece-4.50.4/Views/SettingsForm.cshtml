@@ -1,0 +1,37 @@
+﻿@model CodeInjectorSettings
+
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminPopupLayout.cshtml";
+}
+
+
+<div class="card card-default form-horizontal">
+	<form asp-controller="CodeInjector" asp-action="SettingsForm">
+		<div class="card-body">
+			<div class="search-body">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<div class="col-md-4">
+								<nop-label style="float:left; margin-right:10px" asp-for="@Model.Debug" />
+								<nop-editor  asp-for="@Model.Debug" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-4">
+								<nop-label style="float:left; margin-right:10px" asp-for="@Model.ViewAllZones" />
+								<nop-editor  asp-for="@Model.ViewAllZones" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="text-center col-12">
+						<button type="submit" name="saveSettings" class="btn btn-primary">@T("Admin.Common.Save")</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
