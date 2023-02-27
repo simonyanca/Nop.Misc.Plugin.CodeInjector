@@ -64,34 +64,12 @@ namespace Nop.Plugin.Misc.CodeInjector.Controllers
 		[AuthorizeAdmin]
 		[Area(AreaNames.Admin)]
 		[HttpGet, ActionName("SettingsForm")]
-		public async Task<IActionResult> SetttingsForm()
+		public async Task<IActionResult> SettingsForm()
 		{
 			var storeId = await _storeContext.GetActiveStoreScopeConfigurationAsync();
 			CodeInjectorSettings model = await _settingService.LoadSettingAsync<CodeInjectorSettings>(storeId);
 			return View("~/Plugins/Misc.CodeInjector/Views/SettingsForm.cshtml", model);
 		}
-
-		[AuthorizeAdmin]
-		[Area(AreaNames.Admin)]
-		[HttpPost, ActionName("SettingsForm")]
-		public async Task<IActionResult> SetttingsForm(CodeInjectorSettings model)
-		{
-			if (!ModelState.IsValid)
-			{
-				_notificationService.ErrorNotification("Error");
-				return await SetttingsForm();
-			}
-
-
-			var storeId = await _storeContext.GetActiveStoreScopeConfigurationAsync();
-			await _settingService.SaveSettingAsync(model, storeId);
-			await _settingService.ClearCacheAsync();
-
-			_notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Plugins.Saved"));
-
-            return await SetttingsForm();
-		}
-
 
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
@@ -118,20 +96,7 @@ namespace Nop.Plugin.Misc.CodeInjector.Controllers
 			return Json(model);
 		}
 
-		[AuthorizeAdmin]
-		[Area(AreaNames.Admin)]
-		[HttpGet, ActionName("Reload")]
-		public async Task<IActionResult> Reload()
-		{
-			if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManagePlugins))
-				return AccessDeniedView();
-
-			await _pluginService.UninstallPluginsAsync();
-			await _pluginService.DeletePluginsAsync();
-
-			return await Configure();
-
-		}
+	
 
 		[AuthorizeAdmin]
 		[Area(AreaNames.Admin)]
@@ -156,6 +121,26 @@ namespace Nop.Plugin.Misc.CodeInjector.Controllers
 			return View("~/Plugins/Misc.CodeInjector/Views/AddUpdateISC.cshtml", model);
 		}
 
+		[AuthorizeAdmin]
+		[Area(AreaNames.Admin)]
+		[HttpPost, ActionName("SettingsForm")]
+		public async Task<IActionResult> SettingsForm(CodeInjectorSettings model)
+		{
+			if (!ModelState.IsValid)
+			{
+				_notificationService.ErrorNotification("Error");
+				return await SettingsForm();
+			}
+
+
+			var storeId = await _storeContext.GetActiveStoreScopeConfigurationAsync();
+			await _settingService.SaveSettingAsync(model, storeId);
+			await _settingService.ClearCacheAsync();
+
+			_notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Plugins.Saved"));
+
+			return await SettingsForm();
+		}
 
 		[AuthorizeAdmin]
 		[Area(AreaNames.Admin)]
@@ -173,6 +158,13 @@ namespace Nop.Plugin.Misc.CodeInjector.Controllers
 				await _codeInjectorService.InsertAsync(ent);
 			else
 				await _codeInjectorService.Update(ent);
+
+			//Force call GetActiveZones
+			var storeId = await _storeContext.GetActiveStoreScopeConfigurationAsync();
+			CodeInjectorSettings model2 = await _settingService.LoadSettingAsync<CodeInjectorSettings>(storeId);
+			await _settingService.SaveSettingAsync(model2, storeId);
+			await _settingService.ClearCacheAsync();
+			
 
 			_notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Plugins.Saved"));
 

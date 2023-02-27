@@ -41,7 +41,7 @@ namespace Nop.Plugin.Misc.CodeInjector.Models
 		{ 
 			get
 			{
-				return string.Join("", Code.Take(15)) + "...";
+				return string.Join("", Code.Take(30)) + "...";
 			}
 		}
 

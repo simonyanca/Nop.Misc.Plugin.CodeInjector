@@ -4,6 +4,7 @@ using Nop.Core.Caching;
 using Nop.Core.Events;
 using Nop.Plugin.Misc.CodeInjector.Services;
 using Nop.Services.Caching;
+using Nop.Services.Configuration;
 using Nop.Services.Events;
 
 namespace Nop.Plugin.Misc.CodeInjector.Infrastructure.Cache
@@ -22,14 +23,16 @@ namespace Nop.Plugin.Misc.CodeInjector.Infrastructure.Cache
         #region Fields
 
         private readonly IStaticCacheManager _staticCacheManager;
+        private readonly ISettingService _settingService;
 
-        #endregion
+		#endregion
 
-        #region Ctor
+		#region Ctor
 
-        public ModelCacheEventConsumer(IStaticCacheManager staticCacheManager)
+		public ModelCacheEventConsumer(IStaticCacheManager staticCacheManager, ISettingService settingService)
         {
             _staticCacheManager = staticCacheManager;
+            _settingService = settingService;
         }
 
         #endregion
@@ -69,7 +72,7 @@ namespace Nop.Plugin.Misc.CodeInjector.Infrastructure.Cache
         private async Task ClearCache()
         {
             await _staticCacheManager.RemoveAsync(CodeInjectorDefaults.WidgetZoneHtmlCacheKey);
-        }
+		}
 
 
 

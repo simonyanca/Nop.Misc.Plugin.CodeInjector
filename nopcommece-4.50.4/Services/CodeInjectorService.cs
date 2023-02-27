@@ -69,15 +69,15 @@ namespace Nop.Plugin.Misc.CodeInjector.Services
 
 		public async Task<string[]> GetActiveZones()
         {
-			//load settings for active store scope
-			var store = await _storeContext.GetCurrentStoreAsync();
-			var settings = await _settingService.LoadSettingAsync<CodeInjectorSettings>(store.Id);
+            //load settings for active store scope
+            var store = await _storeContext.GetCurrentStoreAsync();
+            var settings = await _settingService.LoadSettingAsync<CodeInjectorSettings>(store.Id);
 
             if (settings.ViewAllZones)
                 return typeof(PublicWidgetZones).GetProperties().Select(r => r.GetValue(r.Name).ToString()).ToArray();
 
 			var data = await GetZonesDictionary();
-            return data.Keys.ToArray();
+              return data.Keys.ToArray();
         }
 
         public async Task<IPagedList<CodeToInject>> GetAllAsync(CodeToInjectSearchModel searchModel)
@@ -112,7 +112,8 @@ namespace Nop.Plugin.Misc.CodeInjector.Services
             var data = await GetZonesDictionary();
             List<CodeToInject> items = new List<CodeToInject>();
             data.TryGetValue(zone, out items);
-            return items.Select(r => r.ToModel<CodeToInjectDTO>()).ToArray();
+            if (items == null) return new CodeToInjectDTO[0];
+			return items.Select(r => r.ToModel<CodeToInjectDTO>()).ToArray();
         }
 
 		public async Task<CodeToInjectDTO> GetById(int id)
