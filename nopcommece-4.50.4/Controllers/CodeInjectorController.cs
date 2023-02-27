@@ -75,8 +75,7 @@ namespace Nop.Plugin.Misc.CodeInjector.Controllers
         [Area(AreaNames.Admin)]
         public async Task<IActionResult> Configure()
         {
-            ConfigurationModel model = new ConfigurationModel();
-            await PrepareModelAsync(model);
+			CodeToInjectSearchModel model = new CodeToInjectSearchModel();
             return View("~/Plugins/Misc.CodeInjector/Views/Configure.cshtml", model); 
         }
 
@@ -168,7 +167,7 @@ namespace Nop.Plugin.Misc.CodeInjector.Controllers
 
 			_notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Plugins.Saved"));
 
-			return await Configure();
+			return RedirectToAction("Configure");
 		}
 
 		[AuthorizeAdmin]

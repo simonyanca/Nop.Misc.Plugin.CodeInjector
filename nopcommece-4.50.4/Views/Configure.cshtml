@@ -1,6 +1,6 @@
 ﻿@using Nop.Plugin.Misc.CodeInjector.Models;
 @using Nop.Web.Framework.Models.DataTables
-@model ConfigurationModel
+@model CodeToInjectSearchModel
 @{
 	Layout = "_ConfigurePlugin";
 }
@@ -28,20 +28,20 @@
 						<div class="col-md-6">
 							<div class="form-group row">
 								<div class="col-md-4">
-									<nop-label asp-for="@Model.AddModel.Name" />
+									<nop-label asp-for="@Model.Name" />
 								</div>
 								<div class="col-md-8">
-									<nop-editor asp-for="@Model.AddModel.Name" />
+									<nop-editor asp-for="@Model.Name" />
 								</div>
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group row">
 								<div class="col-md-4">
-									<nop-label asp-for="@Model.AddModel.Zone" />
+									<nop-label asp-for="@Model.Zone" />
 								</div>
 								<div class="col-md-8">
-									<nop-editor asp-for="@Model.AddModel.Zone" />
+									<nop-editor asp-for="@Model.Zone" />
 								</div>
 							</div>
 						</div>
@@ -73,8 +73,8 @@
 	Ordering = true,
 	SearchButtonId = "search-codetoinject",
 	Info = false,
-	Length = Model.SearchModel.PageSize,
-	LengthMenu = Model.SearchModel.AvailablePageSizes,
+	Length = Model.PageSize,
+	LengthMenu = Model.AvailablePageSizes,
 	Filters = new List<FilterParameter>
     {
         new FilterParameter(nameof(CodeToInjectDTO.Zone)),
