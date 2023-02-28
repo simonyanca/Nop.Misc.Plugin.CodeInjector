@@ -22,10 +22,7 @@ namespace Nop.Plugin.Misc.CodeInjector.Models
             Settings = new CodeInjectorSettings();
         }
 
-        public IList<SelectListItem> Zones = typeof(PublicWidgetZones).GetProperties().Select(r => new SelectListItem()
-        {
-             Text = r.Name, Value = r.GetValue(r.Name).ToString()
-        }).ToArray(); 
+      
 
         public CodeToInjectDTO AddModel { get; set; }
 

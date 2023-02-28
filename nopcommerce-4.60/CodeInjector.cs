@@ -10,6 +10,7 @@ using Nop.Plugin.Misc.CodeInjector.Services;
 using Nop.Services.Cms;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
+using Nop.Services.Localization;
 using Nop.Services.Plugins;
 
 namespace Nop.Plugin.Misc.CodeInjector
@@ -20,16 +21,20 @@ namespace Nop.Plugin.Misc.CodeInjector
         private readonly WidgetSettings _widgetSettings;
         private readonly ISettingService _settingService;
         private readonly ICodeInjectorService _codeInjectorService;
+		private readonly ILocalizationService _localizationService;
 
-        public bool HideInWidgetList => true;
+		public bool HideInWidgetList => true;
 
-        public CodeInjector(  IWebHelper webHelper, WidgetSettings widgetSettings, ISettingService settingService, ICodeInjectorService codeInjectorService)
+        public CodeInjector(  IWebHelper webHelper, WidgetSettings widgetSettings, ISettingService settingService, ICodeInjectorService codeInjectorService, ILocalizationService localizationService)
         {
             _webHelper = webHelper;
             _widgetSettings = widgetSettings;
             _settingService = settingService;
             _codeInjectorService = codeInjectorService;
-        }
+            _localizationService = localizationService;
+
+			
+		}
 
         public Type GetWidgetViewComponent(string widgetZone)
         {
@@ -62,12 +67,22 @@ namespace Nop.Plugin.Misc.CodeInjector
                 await _settingService.SaveSettingAsync(_widgetSettings);
             }
 
-            await base.InstallAsync();
+            await _localizationService.AddOrUpdateLocaleResourceAsync(new Dictionary<string, string>
+            {
+                ["Nop.Plugin.Misc.CodeInjector.EditSettings"] = "Edit Settings",
+            });
+
+			await base.InstallAsync();
         }
 
         public override async Task UninstallAsync()
         {
             await base.UninstallAsync();
         }
-    }
+
+		public string GetWidgetViewComponentName(string widgetZone)
+		{
+            return CodeInjectorDefaults.VIEW_COMPONENT_NAME;
+		}
+	}
 }

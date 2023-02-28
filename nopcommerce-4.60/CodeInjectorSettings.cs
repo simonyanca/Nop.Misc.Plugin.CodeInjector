@@ -11,5 +11,6 @@ namespace Nop.Plugin.Misc.CodeInjector
     public class CodeInjectorSettings : ISettings
     {
         public bool Debug { get; set; }
-    }
+		public bool ViewAllZones { get; set; }
+	}
 }

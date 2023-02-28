@@ -1,160 +1,58 @@
 ﻿@using Nop.Plugin.Misc.CodeInjector.Models;
 @using Nop.Web.Framework.Models.DataTables
-@model ConfigurationModel
+@model CodeToInjectSearchModel
 @{
 	Layout = "_ConfigurePlugin";
 }
 
-<script>
-	function HideShow() {
-		var x = document.getElementById("newCodeToInjectContent");
-		if (x.style.display === "none") {
-			x.style.display = "block";
-		} else {
-			x.style.display = "none";
-		}
-	}
-</script>
-
-
-
 <div class="cards-group">
 	<div class="card-body">
-		@Html.Partial("~/Plugins/Misc.CodeInjector/Views/Shared/SettingsForm.cshtml", Model.Settings)
-	</div>
-
-	<div class="content-header clearfix">
 		<div class="float-right">
-			<a onclick="HideShow()" class="btn btn-primary">
+			<button class="btn bg-olive" onclick="javascript:OpenWindow('@(Url.Action("SettingsForm", "CodeInjector",  new { btnId = "btnRefresh" }))', 500, 300, true); return false;">
+				<i class="fas fa-pencil-alt"></i>
+				@T("Nop.Plugin.Misc.CodeInjector.EditSettings")
+			</button>
+			<button class="btn bg-olive" onclick="location.href='@(Url.Action("Add", "CodeInjector"))'" type="button">
 				<i class="fas fa-plus-square"></i>
-				@T("Admin.Common.AddNew")
-			</a>
-		</div>
-	</div>
-	<div class="card-body">
-		<div id="newCodeToInjectContent" class="card card-default" style="display: none">
-			<div class="card-header">
 				@T("Admin.Common.AddNewRecord")
-			</div>
-
-			<div class="card-body">
-				<div class="form-group row">
-					<div class="col-md-3">
-						<nop-label asp-for="@Model.AddModel.Name)" />
-					</div>
-					<div class="col-md-9">
-						<nop-editor asp-for="@Model.AddModel.Name" />
-						<span asp-validation-for="@Model.AddModel.Name"></span>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-md-3">
-						<nop-label asp-for="@Model.AddModel.Zone" />
-					</div>
-					<div class="col-md-9">
-						<select asp-for="@Model.AddModel.Zone" asp-items="@Model.Zones" class="dropdownlists"></select>
-						<span asp-validation-for="@Model.AddModel.Zone"></span>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-md-3">
-						<nop-label asp-for="@Model.AddModel.Code" />
-					</div>
-					<div class="col-md-9">
-						<nop-editor asp-for="@Model.AddModel.Code" />
-						<span asp-validation-for="@Model.AddModel.Code"></span>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-md-3">
-						<nop-label asp-for="@Model.AddModel.Order" />
-					</div>
-					<div class="col-md-9">
-						<nop-editor asp-for="@Model.AddModel.Order" />
-						<span asp-validation-for="@Model.AddModel.Order"></span>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-md-9 offset-md-3">
-						<button type="button" id="addCodeToInject" class="btn btn-primary">@T("Admin.Common.AddNew")</button>
-					</div>
-				</div>
-			</div>
-			<script>
-				$(document).ready(function () {
-					$('#addCodeToInject').click(function () {
-						$('#addCodeToInject').attr('disabled', true);
-						var postData = {
-							Name: $('#@Html.IdFor(model => model.AddModel.Name)').val(),
-							Code: $('#@Html.IdFor(model => model.AddModel.Code)').val(),
-							Zone: $('#@Html.IdFor(model => model.AddModel.Zone)').val(),
-							Order: $('#@Html.IdFor(model => model.AddModel.Order)').val()
-						};
-
-						addAntiForgeryToken(postData);
-
-						$.ajax({
-							cache: false,
-							type: 'POST',
-							url: '@Html.Raw(Url.Action("Add", "CodeInjector", null))',
-							data: postData,
-							success: function (data, textStatus, jqXHR) {
-								if (data.Result) {
-									$('#@Html.IdFor(model => model.AddModel.Code)').val('');
-									$('#@Html.IdFor(model => model.AddModel.Zone)').val('');
-									$('#@Html.IdFor(model => model.AddModel.Name)').val('');
-									$('#@Html.IdFor(model => model.AddModel.Order)').val('');
-									updateTable('#codetoinject-grid');
-								} else {
-									display_nop_error(data);
-								}
-							},
-							complete: function (jqXHR, textStatus) {
-								$('#addCodeToInject').attr('disabled', false);
-							}
-						});
-					});
-				});
-			</script>
+			</button>
 		</div>
 	</div>
 
-	<div class="card-body">
-	@*Buscador*@
-		<form asp-controller="CodeToInject" asp-action="Get">
-			<div class="card card-default card-search form-horizontal">
-				<div class="card-body">
-					<div class="search-body">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group row">
-									<div class="col-md-4">
-										<nop-label asp-for="@Model.AddModel.Name" />
-									</div>
-									<div class="col-md-8">
-										<nop-editor asp-for="@Model.AddModel.Name" />
-									</div>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group row">
-									<div class="col-md-4">
-										<nop-label asp-for="@Model.AddModel.Zone" />
-									</div>
-									<div class="col-md-8">
-										<nop-editor asp-for="@Model.AddModel.Zone" />
-									</div>
-								</div>
-							</div>
 
-						</div>
-						<div class="form-group row">
-							<div class="text-center col-12">
-								<button type="button" id="search-codetoinject" class="btn btn-primary btn-search">
-									<i class="fas fa-search"></i>
-									@T("Admin.Common.Search")
-								</button>
+	<div class="card-body">
+		<form asp-controller="ICS" asp-action="Get">
+			<div class="card card-default card-search form-horizontal">
+				<div class="search-body">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group row">
+								<div class="col-md-4">
+									<nop-label asp-for="@Model.Name" />
+								</div>
+								<div class="col-md-8">
+									<nop-editor asp-for="@Model.Name" />
+								</div>
 							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group row">
+								<div class="col-md-4">
+									<nop-label asp-for="@Model.Zone" />
+								</div>
+								<div class="col-md-8">
+									<nop-editor asp-for="@Model.Zone" />
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="form-group row">
+						<div class="text-center col-12">
+							<button type="button" id="search-codetoinject" class="btn btn-primary btn-search">
+								<i class="fas fa-search"></i>
+								@T("Admin.Common.Search")
+							</button>
 						</div>
 					</div>
 				</div>
@@ -165,17 +63,18 @@
 
 @await Html.PartialAsync("Table", new DataTablesModel
 {
-    Name = "codetoinject-grid",
+    Name = "CodeInjector-grid",
+	//UrlUpdate = new DataUrl("Update", "CodeInjector"),
     UrlRead = new DataUrl("Get", "CodeInjector"),
 	UrlDelete = new DataUrl("Remove", "CodeInjector"),
 	Processing = true,
-	PrimaryKeyColumn = nameof(CodeToInjectDTO.Id),
+	//PrimaryKeyColumn = nameof(CodeToInjectDTO.Id),
 	Paging = true,
 	Ordering = true,
 	SearchButtonId = "search-codetoinject",
 	Info = false,
-	Length = Model.SearchModel.PageSize,
-	LengthMenu = Model.SearchModel.AvailablePageSizes,
+	Length = Model.PageSize,
+	LengthMenu = Model.AvailablePageSizes,
 	Filters = new List<FilterParameter>
     {
         new FilterParameter(nameof(CodeToInjectDTO.Zone)),
@@ -194,23 +93,36 @@
 			EditType = EditType.String,
 			Searchable = true
         },
-		new ColumnProperty(nameof(CodeToInjectDTO.Zone))
+		new ColumnProperty(nameof(CodeToInjectDTO.RenderTypeName))
         {
-            Title = "Name",
+            Title = "RenderMode",
 			EditType = EditType.String,
 			Searchable = true
         },
-		new ColumnProperty(nameof(CodeToInjectDTO.Code))
+		new ColumnProperty(nameof(CodeToInjectDTO.Zone))
         {
-            Title = "Name",
+            Title = "Zone",
 			EditType = EditType.String,
 			Searchable = true
+        },
+		new ColumnProperty(nameof(CodeToInjectDTO.CodeShort))
+        {
+            Title = "Code",
+			EditType =  EditType.String,
+			Width = "300",
+			Searchable = true,
         },
 		new ColumnProperty(nameof(CodeToInjectDTO.Order))
         {
-            Title = "Name",
+            Title = "Order",
 			EditType = EditType.Number,
 			Searchable = true
+        },
+		 new ColumnProperty(nameof(CodeToInjectDTO.Id))
+        {
+            Title = T("Admin.Common.Edit").Text,
+            ClassName = NopColumnClassDefaults.Button,
+            Render = new RenderButtonEdit(new DataUrl("~/Admin/CodeInjector/update/", false))
         },
 		new ColumnProperty(nameof(CodeToInjectDTO.Id))
 		{
