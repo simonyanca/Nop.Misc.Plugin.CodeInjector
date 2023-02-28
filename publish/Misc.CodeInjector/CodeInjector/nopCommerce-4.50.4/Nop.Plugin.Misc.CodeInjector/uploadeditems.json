@@ -1,0 +1,9 @@
+﻿[
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.50.4",
+    "DirectoryPath": "Nop.Plugin.Misc.CodeInjector/",
+    "SystemName": "Misc.CodeInjector",
+    "SourceDirectoryPath": "Nop.Plugin.Misc.CodeInjector/"
+  }
+]

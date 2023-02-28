@@ -1,0 +1,134 @@
+﻿@using Nop.Plugin.Misc.CodeInjector.Models;
+@using Nop.Web.Framework.Models.DataTables
+@model CodeToInjectSearchModel
+@{
+	Layout = "_ConfigurePlugin";
+}
+
+<div class="cards-group">
+	<div class="card-body">
+		<div class="float-right">
+			<button class="btn bg-olive" onclick="javascript:OpenWindow('@(Url.Action("SettingsForm", "CodeInjector",  new { btnId = "btnRefresh" }))', 500, 300, true); return false;">
+				<i class="fas fa-pencil-alt"></i>
+				@T("Nop.Plugin.Misc.CodeInjector.EditSettings")
+			</button>
+			<button class="btn bg-olive" onclick="location.href='@(Url.Action("Add", "CodeInjector"))'" type="button">
+				<i class="fas fa-plus-square"></i>
+				@T("Admin.Common.AddNewRecord")
+			</button>
+		</div>
+	</div>
+
+
+	<div class="card-body">
+		<form asp-controller="ICS" asp-action="Get">
+			<div class="card card-default card-search form-horizontal">
+				<div class="search-body">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group row">
+								<div class="col-md-4">
+									<nop-label asp-for="@Model.Name" />
+								</div>
+								<div class="col-md-8">
+									<nop-editor asp-for="@Model.Name" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group row">
+								<div class="col-md-4">
+									<nop-label asp-for="@Model.Zone" />
+								</div>
+								<div class="col-md-8">
+									<nop-editor asp-for="@Model.Zone" />
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="form-group row">
+						<div class="text-center col-12">
+							<button type="button" id="search-codetoinject" class="btn btn-primary btn-search">
+								<i class="fas fa-search"></i>
+								@T("Admin.Common.Search")
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+@await Html.PartialAsync("Table", new DataTablesModel
+{
+    Name = "CodeInjector-grid",
+	//UrlUpdate = new DataUrl("Update", "CodeInjector"),
+    UrlRead = new DataUrl("Get", "CodeInjector"),
+	UrlDelete = new DataUrl("Remove", "CodeInjector"),
+	Processing = true,
+	//PrimaryKeyColumn = nameof(CodeToInjectDTO.Id),
+	Paging = true,
+	Ordering = true,
+	SearchButtonId = "search-codetoinject",
+	Info = false,
+	Length = Model.PageSize,
+	LengthMenu = Model.AvailablePageSizes,
+	Filters = new List<FilterParameter>
+    {
+        new FilterParameter(nameof(CodeToInjectDTO.Zone)),
+        new FilterParameter(nameof(CodeToInjectDTO.Name))
+    },
+    ColumnCollection = new List<ColumnProperty>
+    {
+		new ColumnProperty(nameof(CodeToInjectDTO.Id))
+        {
+            Title = "Id",
+			Visible = false
+        },
+        new ColumnProperty(nameof(CodeToInjectDTO.Name))
+        {
+            Title = "Name",
+			EditType = EditType.String,
+			Searchable = true
+        },
+		new ColumnProperty(nameof(CodeToInjectDTO.RenderTypeName))
+        {
+            Title = "RenderMode",
+			EditType = EditType.String,
+			Searchable = true
+        },
+		new ColumnProperty(nameof(CodeToInjectDTO.Zone))
+        {
+            Title = "Zone",
+			EditType = EditType.String,
+			Searchable = true
+        },
+		new ColumnProperty(nameof(CodeToInjectDTO.CodeShort))
+        {
+            Title = "Code",
+			EditType =  EditType.String,
+			Width = "300",
+			Searchable = true,
+        },
+		new ColumnProperty(nameof(CodeToInjectDTO.Order))
+        {
+            Title = "Order",
+			EditType = EditType.Number,
+			Searchable = true
+        },
+		 new ColumnProperty(nameof(CodeToInjectDTO.Id))
+        {
+            Title = T("Admin.Common.Edit").Text,
+            ClassName = NopColumnClassDefaults.Button,
+            Render = new RenderButtonEdit(new DataUrl("~/Admin/CodeInjector/update/", false))
+        },
+		new ColumnProperty(nameof(CodeToInjectDTO.Id))
+		{
+            Title = T("Admin.Common.Delete").Text,
+            Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+            ClassName = NopColumnClassDefaults.Button
+        }
+    }
+})
