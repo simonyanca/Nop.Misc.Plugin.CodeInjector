@@ -5,7 +5,7 @@
     <Copyright>Copyright ©, Ltd</Copyright>
     <Authors>Gerardo Tous</Authors>
     <PackageLicenseUrl></PackageLicenseUrl>
-	  <OutputPath>..\..\..\nopCommerce-release-4.50.4\Presentation\Nop.Web\Plugins\Misc.CodeInjector</OutputPath>
+	  <OutputPath></OutputPath>
     <OutDir>$(OutputPath)</OutDir>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
@@ -34,7 +34,7 @@
   </ItemGroup>
   
   <ItemGroup>
-	  <ClearPluginAssemblies Include="$(MSBuildProjectDirectory)\..\..\..\nopCommerce-release-4.50.4\Build\ClearPluginAssemblies.proj" />
+	  <ClearPluginAssemblies Include="$(MSBuildProjectDirectory)\..\..\nopCommerce-release-4.50.4\Build\ClearPluginAssemblies.proj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,7 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <ProjectReference Include="..\..\..\nopCommerce-release-4.50.4\Presentation\Nop.Web\Nop.Web.csproj" />
+    <ProjectReference Include="..\..\nopCommerce-release-4.50.4\Presentation\Nop.Web\Nop.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,6 +74,9 @@
   <Target Name="NopTarget" AfterTargets="Build">
     <!-- Delete unnecessary libraries from plugins path -->
     <MSBuild Projects="@(ClearPluginAssemblies)" Properties="PluginPath=$(MSBuildProjectDirectory)\$(OutDir)" Targets="NopClear" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;bin\Debug\net6.0\*&quot; &quot;..\..\nopCommerce-release-4.50.4\Presentation\Nop.Web\Plugins\Misc.CodeInjector&quot; /h /i /c /k /e /r /y" />
   </Target>
 
 </Project>

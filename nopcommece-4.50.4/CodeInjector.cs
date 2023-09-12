@@ -12,7 +12,7 @@ using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
 using Nop.Services.Plugins;
-
+ 
 namespace Nop.Plugin.Misc.CodeInjector
 {   
     public class CodeInjector : BasePlugin, IMiscPlugin, IWidgetPlugin
